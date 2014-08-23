@@ -1,4 +1,4 @@
-CodePath
+Todo Application
 ========
 
-ToDo Application: A prerequisite Android application for the CodePath bootcamp.
+A prerequisite Android application for the CodePath bootcamp.
