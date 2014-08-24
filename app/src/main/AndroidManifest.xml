@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".TodoActivity"
+            android:name=".activity.TodoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -20,7 +20,7 @@
         </activity>
 
         <activity
-            android:name=".EditItemActivity"
+            android:name=".fragments.EditItemDialogFragment"
             android:label="@string/title_activity_edit_item"
             android:screenOrientation="portrait"></activity>
     </application>

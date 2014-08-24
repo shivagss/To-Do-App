@@ -7,14 +7,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="test.shiva.org.todoapplication.EditItemActivity">
+    tools:context="test.shiva.org.todoapplication.fragments.EditItemDialogFragment">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="20dp"
         android:text="@string/edit_item_label"
@@ -22,22 +21,57 @@
 
     <EditText
         android:id="@+id/editText2"
-        android:layout_width="300dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/textView"
         android:singleLine="true"
         android:layout_marginBottom="20dp" />
+
+
+
+    <Button
+        android:id="@+id/date_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText2"
+        android:text="@string/date_picker_button" />
+
+
+    <TextView
+        android:id="@+id/date_picker_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText2"
+        android:layout_toRightOf="@+id/date_picker"
+        android:layout_marginBottom="20dp"
+        android:text="@string/date_picker_label"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/priority_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date_picker"
+        android:layout_marginBottom="20dp"
+        android:text="@string/priority_label"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/priority_array"
+        android:layout_toRightOf="@+id/priority_label"
+        android:layout_below="@+id/date_picker"/>
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText2"
-        android:onClick="onSubmit"
+        android:layout_below="@+id/priority_label"
         android:text="@string/save_button_label" />
 
 </RelativeLayout>
