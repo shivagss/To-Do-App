@@ -9,14 +9,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
         android:focusable="false"/>
+
+    <TextView
+        android:id="@+id/color_code"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/holo_red_dark"
+        android:layout_margin="5dp"/>
 
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toLeftOf="@id/imageButton"
+        android:layout_toRightOf="@id/color_code"
         android:orientation="vertical">
 
         <TextView

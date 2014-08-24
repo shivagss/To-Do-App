@@ -3,6 +3,7 @@ package test.shiva.org.todoapplication.activity;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +20,11 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import test.shiva.org.todoapplication.R;
@@ -144,6 +149,7 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
             TextView name;
             TextView desc;
             ImageButton priority;
+            TextView color_code;
         }
 
         public TodoItemsAdapter(Context context, ArrayList<TodoItem> items) {
@@ -163,6 +169,7 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
                 viewHolder.name = (TextView) convertView.findViewById(R.id.textView);
                 viewHolder.desc = (TextView) convertView.findViewById(R.id.textView2);
                 viewHolder.priority = (ImageButton) convertView.findViewById(R.id.imageButton);
+                viewHolder.color_code = (TextView) convertView.findViewById(R.id.color_code);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -176,14 +183,53 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
 
             if(item.getPriority().equals("High")){
                 priority = android.R.drawable.star_on;
-            }else if(item.getPriority().equals("Normal")){
+            }else if(item.getPriority().equals("Low")){
+                priority = android.R.drawable.star_off;
+            }else{
                 viewHolder.priority.setVisibility(View.INVISIBLE);
             }
             viewHolder.priority.setImageResource(priority);
             viewHolder.priority.setFocusable(false);
 
+            int color = getColorCode(item.getDate());
+            viewHolder.color_code.setBackgroundColor(color);
             // Return the completed view to render on screen
             return convertView;
+        }
+
+        private int getColorCode(String date) {
+
+            switch (getDayofWeek(date)){
+                case 1:
+                    return Color.YELLOW;
+                case 2:
+                    return Color.BLUE;
+                case 3:
+                    return Color.GREEN;
+                case 4:
+                    return Color.RED;
+                case 5:
+                    return Color.GRAY;
+                case 6:
+                    return Color.DKGRAY;
+                case 7:
+                    return Color.LTGRAY;
+            }
+            return Color.WHITE;
+        }
+
+        private int getDayofWeek(String duedate) {
+            try {
+            final Calendar c = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = format.parse(duedate);
+                System.out.println(date);
+                c.setTime(date);
+                return c.get(Calendar.DAY_OF_WEEK);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return 1;
         }
     }
 }

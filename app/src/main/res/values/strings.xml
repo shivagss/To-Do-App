@@ -11,12 +11,15 @@
     <string name="edit_item_label">Edit item below:</string>
     <string name="save_button_label">Save</string>
     <string name="date_picker_label">No Due</string>
-    <string name="priority_label">Select Priority</string>
-    <string name="date_picker_button">Select Due Date</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="priority_label">Select Priority:</string>
+    <string name="date_picker_button">Due Date:</string>
+    <string name="edittext2_label">Todo Item:</string>
+    <string name="edit_item_title">Edit Item</string>
+    <string name="add_item_title">Add Item</string>
+    <string name="reset_button_label">Reset</string>
 
     <string-array name="priority_array">
-        <item>Normal</item>
+        <item>Standard</item>
         <item>High</item>
         <item>Low</item>
     </string-array>

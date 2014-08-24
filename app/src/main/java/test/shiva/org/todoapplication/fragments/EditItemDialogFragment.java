@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,10 +26,6 @@ import test.shiva.org.todoapplication.pojo.TodoItem;
 
 public class EditItemDialogFragment extends DialogFragment {
 
-    private static final String EXTRA_INDEX = "index";
-    private static final String EXTRA_ITEM = "item";
-    private static final String EXTRA_DATE = "date";
-    private static final String EXTRA_PRIORITY = "priority";
     private EditText mEditText;
     private static TextView mDatePicker;
     private static DatePickerDialog mDatePickerDialog;
@@ -41,7 +38,8 @@ public class EditItemDialogFragment extends DialogFragment {
     private static int day;
     private OnEditItemListener mCallback;
     private Button mButton;
-    private Button mDatePickerButton;
+    private ImageButton mDatePickerButton;
+    private Button mReset;
 
     public static EditItemDialogFragment getInstance(TodoItem item, int index){
         sIndex = index;
@@ -83,7 +81,15 @@ public class EditItemDialogFragment extends DialogFragment {
         });
 
 
-        mDatePickerButton = (Button)v.findViewById(R.id.date_picker);
+        mReset = (Button)v.findViewById(R.id.reset);
+        mReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onReset(view);
+            }
+        });
+
+        mDatePickerButton = (ImageButton)v.findViewById(R.id.date_picker);
         mDatePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +98,11 @@ public class EditItemDialogFragment extends DialogFragment {
         });
 
         mEditText = (EditText)v.findViewById(R.id.editText2);
+
+        getDialog().setTitle(getString(R.string.add_item_title));
+
         if(sItem != null) {
+            getDialog().setTitle(getString(R.string.edit_item_title));
             mEditText.setText(sItem.getName());
             ArrayAdapter myAdap = (ArrayAdapter) mPriority.getAdapter();
             int spinnerPosition = myAdap.getPosition(sItem.getPriority());
@@ -102,8 +112,15 @@ public class EditItemDialogFragment extends DialogFragment {
              month = Integer.parseInt(date[1]) - 1;
              day = Integer.parseInt(date[2]);
             mDatePicker.setText(sItem.getDate());
+
         }
         return v;
+    }
+
+    private void onReset(View view) {
+        mEditText.setText("");
+        mDatePicker.setText(getString(R.string.date_picker_label));
+        mPriority.setSelection(0);
     }
 
     /**
@@ -132,9 +149,6 @@ public class EditItemDialogFragment extends DialogFragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-
             mDatePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
             mDatePickerDialog.getDatePicker().setMinDate(new Date().getTime());
             return mDatePickerDialog;
