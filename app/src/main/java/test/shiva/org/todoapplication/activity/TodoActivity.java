@@ -16,18 +16,14 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import test.shiva.org.todoapplication.R;
+import test.shiva.org.todoapplication.db.TodoItemDatabaseHelper;
 import test.shiva.org.todoapplication.fragments.EditItemDialogFragment;
 import test.shiva.org.todoapplication.pojo.TodoItem;
 
@@ -38,13 +34,17 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
     private ArrayList<TodoItem> mListItems;
     private ArrayAdapter<TodoItem> mListAdapter;
     private ListView mListView;
+    private TodoItemDatabaseHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        mDBHelper = new TodoItemDatabaseHelper(this);
+
         mListView = (ListView) findViewById(R.id.listView2);
+        mListView.setEmptyView(findViewById(android.R.id.empty));
 
         readItems();
         mListAdapter = new TodoItemsAdapter(getBaseContext(), mListItems);
@@ -54,38 +54,15 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
     }
 
     private void readItems() {
-        File fileDir = getFilesDir();
-        File todoFile = new File(fileDir, TODO_ITEMS_FILE);
-
-        mListItems = new ArrayList<TodoItem>();
-
-        try {
-            ArrayList<String> list = new ArrayList<String>(FileUtils.readLines(todoFile));
-            for(String s : list){
-                mListItems.add(TodoItem.readFromFile(s));
-            }
-        } catch (IOException e) {
-            //DO NOTHING
-        }
-    }
-
-    private void writeItems() {
-        File fileDir = getFilesDir();
-        File todoFile = new File(fileDir, TODO_ITEMS_FILE);
-
-        try {
-            FileUtils.writeLines(todoFile, mListItems);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mListItems = mDBHelper.getAllTodoItems();
     }
 
     private void setupListViewListener() {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mListItems.remove(i);
-                updateListAndPersist();
+                mDBHelper.deleteTodoItem(mListItems.get(i));
+                refreshList();
                 return true;
             }
         });
@@ -118,29 +95,24 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
             return true;
         }
         if (id == R.id.clear) {
-            mListItems.clear();
-            updateListAndPersist();
+            for(TodoItem todoitem : mListItems) {
+                mDBHelper.deleteTodoItem(todoitem);
+            }
+            refreshList();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateListAndPersist() {
-        mListAdapter.notifyDataSetChanged();
-        writeItems();
+    public void addNewTodoItem(View v) {
+        launchEditActivity(mListItems.size(), null);
     }
 
     @Override
-    public void onItemEdited(TodoItem item, int index) {
-        if (index >= 0 && index < mListItems.size()) {
-            mListItems.set(index, item);
-            updateListAndPersist();
-        }
-
-        if (index >= mListItems.size()) {
-            mListAdapter.add(item);
-            updateListAndPersist();
-        }
+    public void refreshList() {
+        mListItems.clear();
+        mListItems.addAll(mDBHelper.getAllTodoItems());
+        mListAdapter.notifyDataSetChanged();
     }
 
     public class TodoItemsAdapter extends ArrayAdapter<TodoItem> {

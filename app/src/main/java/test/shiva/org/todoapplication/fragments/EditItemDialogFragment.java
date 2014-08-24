@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import test.shiva.org.todoapplication.R;
+import test.shiva.org.todoapplication.db.TodoItemDatabaseHelper;
 import test.shiva.org.todoapplication.pojo.TodoItem;
 
 public class EditItemDialogFragment extends DialogFragment {
@@ -40,6 +41,7 @@ public class EditItemDialogFragment extends DialogFragment {
     private Button mButton;
     private ImageButton mDatePickerButton;
     private Button mReset;
+    private TodoItemDatabaseHelper mDBHelper;
 
     public static EditItemDialogFragment getInstance(TodoItem item, int index){
         sIndex = index;
@@ -49,7 +51,7 @@ public class EditItemDialogFragment extends DialogFragment {
 
     // Container Activity must implement this interface
     public interface OnEditItemListener {
-        public void onItemEdited(TodoItem item, int index);
+        public void refreshList();
     }
 
     @Override
@@ -69,6 +71,8 @@ public class EditItemDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.activity_edit_item, container, false);
+
+        mDBHelper = new TodoItemDatabaseHelper(getActivity());
 
         mDatePicker = (TextView)v.findViewById(R.id.date_picker_label);
         mPriority = (Spinner)v.findViewById(R.id.spinner1);
@@ -112,7 +116,6 @@ public class EditItemDialogFragment extends DialogFragment {
              month = Integer.parseInt(date[1]) - 1;
              day = Integer.parseInt(date[2]);
             mDatePicker.setText(sItem.getDate());
-
         }
         return v;
     }
@@ -132,9 +135,17 @@ public class EditItemDialogFragment extends DialogFragment {
         if (TextUtils.isEmpty(item)) {return;}
 
         if(mCallback != null){
+            int id = 0;
             TodoItem todo = new TodoItem(item, mDatePicker.getText().toString(),
-                    mPriority.getSelectedItem().toString());
-            mCallback.onItemEdited(todo, sIndex);
+                    mPriority.getSelectedItem().toString(), new Date().getTime());
+            if(sItem == null) {
+                mDBHelper.addTodo(todo);
+            }else{
+                id = sItem.getId();
+                todo.setId(id);
+                mDBHelper.updateTodoItem(todo);
+            }
+            mCallback.refreshList();
         }
         this.dismiss();
     }

@@ -5,9 +5,12 @@ package test.shiva.org.todoapplication.pojo;
  */
 public class TodoItem {
 
+    private int id;
     private String name;
     private String date;
     private String priority;
+    private long creation_date;
+
     private boolean isHeader;
 
     public boolean isHeader() {
@@ -20,10 +23,19 @@ public class TodoItem {
 
     }
 
-    public TodoItem(String name, String date, String priority) {
+    public TodoItem(String name, String date, String priority, long creation_date) {
         this.name = name;
         this.date = date;
         this.priority = priority;
+        this.creation_date = creation_date;
+    }
+
+    public TodoItem(int id, String name, String date, String priority, long creation_date) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.priority = priority;
+        this.creation_date = creation_date;
     }
 
     public String getDate() {
@@ -56,21 +68,15 @@ public class TodoItem {
         return name + " "+ date + " "+ priority;
     }
 
-    public static TodoItem readFromFile(String line){
-        String[] arr = line.split(" ");
-        int length = arr.length;
-        if(length >= 3){
-            String priority = arr[length - 1];
-            String date = arr[length - 2];
-            String name = "";
-            for(int i = 0; i<= length - 3; i++){
-                name += arr[i];
-                if(i < length - 3){
-                    name += " ";
-                }
-            }
-            return new TodoItem(name,date,priority);
-        }
-        return null;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public long getCreation_date() {
+        return creation_date;
     }
 }

@@ -11,12 +11,13 @@
     <string name="edit_item_label">Edit item below:</string>
     <string name="save_button_label">Save</string>
     <string name="date_picker_label">No Due</string>
-    <string name="priority_label">Select Priority:</string>
+    <string name="priority_label">Priority:</string>
     <string name="date_picker_button">Due Date:</string>
     <string name="edittext2_label">Todo Item:</string>
     <string name="edit_item_title">Edit Item</string>
     <string name="add_item_title">Add Item</string>
     <string name="reset_button_label">Reset</string>
+    <string name="empty_list_label">Click to add a new item</string>
 
     <string-array name="priority_array">
         <item>Standard</item>
