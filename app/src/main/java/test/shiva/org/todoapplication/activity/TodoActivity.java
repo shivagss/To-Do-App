@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,8 +29,6 @@ import test.shiva.org.todoapplication.fragments.EditItemDialogFragment;
 import test.shiva.org.todoapplication.pojo.TodoItem;
 
 public class TodoActivity extends Activity implements EditItemDialogFragment.OnEditItemListener {
-
-    private static final String TODO_ITEMS_FILE = "todo.txt";
 
     private ArrayList<TodoItem> mListItems;
     private ArrayAdapter<TodoItem> mListAdapter;
@@ -95,7 +94,7 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
             return true;
         }
         if (id == R.id.clear) {
-            for(TodoItem todoitem : mListItems) {
+            for (TodoItem todoitem : mListItems) {
                 mDBHelper.deleteTodoItem(todoitem);
             }
             refreshList();
@@ -148,16 +147,25 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
             }
             // Populate the data into the template view using the data object
             viewHolder.name.setText(item.getName());
-            viewHolder.desc.setText(item.getDate());
+            if(!item.getDate().equals("No Due")) {
+                long days = daysBetween(parseStringDate(item.getDate()));
+                if (days < 0) {
+                    viewHolder.desc.setText(getString(R.string.due_expired));
+                } else {
+                    viewHolder.desc.setText((MessageFormat.format(getString(R.string.due_days), days)));
+                }
+            }else{
+                viewHolder.desc.setText(item.getDate());
+            }
 
             int priority = android.R.drawable.star_off;
             viewHolder.priority.setVisibility(View.VISIBLE);
 
-            if(item.getPriority().equals("High")){
+            if (item.getPriority().equals("High")) {
                 priority = android.R.drawable.star_on;
-            }else if(item.getPriority().equals("Low")){
+            } else if (item.getPriority().equals("Low")) {
                 priority = android.R.drawable.star_off;
-            }else{
+            } else {
                 viewHolder.priority.setVisibility(View.INVISIBLE);
             }
             viewHolder.priority.setImageResource(priority);
@@ -171,7 +179,7 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
 
         private int getColorCode(String date) {
 
-            switch (getDayofWeek(date)){
+            switch (getDayofWeek(date)) {
                 case 1:
                     return Color.YELLOW;
                 case 2:
@@ -192,16 +200,38 @@ public class TodoActivity extends Activity implements EditItemDialogFragment.OnE
 
         private int getDayofWeek(String duedate) {
             try {
-            final Calendar c = Calendar.getInstance();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                final Calendar c = Calendar.getInstance();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = format.parse(duedate);
                 System.out.println(date);
                 c.setTime(date);
                 return c.get(Calendar.DAY_OF_WEEK);
             } catch (ParseException e) {
-                e.printStackTrace();
             }
-            return 1;
+            return 0;
         }
+
+        private Calendar parseStringDate(String duedate) {
+            try {
+                final Calendar c = Calendar.getInstance();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = format.parse(duedate);
+                System.out.println(date);
+                c.setTime(date);
+                return c;
+            } catch (ParseException e) {
+            }
+            return null;
+        }
+    }
+
+    public static long daysBetween(Calendar endDate) {
+        Calendar date = Calendar.getInstance();
+        long daysBetween = 0;
+        while (date.before(endDate)) {
+            date.add(Calendar.DAY_OF_MONTH, 1);
+            daysBetween++;
+        }
+        return daysBetween;
     }
 }

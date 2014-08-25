@@ -1,4 +1,4 @@
-Todo Application
+Todo App
 ========
 
-A prerequisite Android application for the CodePath bootcamp.
+

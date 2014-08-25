@@ -18,11 +18,12 @@
     <string name="add_item_title">Add Item</string>
     <string name="reset_button_label">Reset</string>
     <string name="empty_list_label">Click to add a new item</string>
+    <string name="due_expired">Expired</string>
+    <string name="due_days">{0,choice,0#Due Today|1#Due Tomorrow|1&lt;Due in {0} days}</string>
 
     <string-array name="priority_array">
         <item>Standard</item>
         <item>High</item>
         <item>Low</item>
     </string-array>
-
 </resources>

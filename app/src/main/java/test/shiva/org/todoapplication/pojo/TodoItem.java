@@ -11,18 +11,6 @@ public class TodoItem {
     private String priority;
     private long creation_date;
 
-    private boolean isHeader;
-
-    public boolean isHeader() {
-        return isHeader;
-    }
-
-    public TodoItem(String title) {
-        this.name = title;
-        isHeader = true;
-
-    }
-
     public TodoItem(String name, String date, String priority, long creation_date) {
         this.name = name;
         this.date = date;

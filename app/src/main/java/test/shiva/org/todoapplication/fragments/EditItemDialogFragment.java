@@ -111,10 +111,12 @@ public class EditItemDialogFragment extends DialogFragment {
             ArrayAdapter myAdap = (ArrayAdapter) mPriority.getAdapter();
             int spinnerPosition = myAdap.getPosition(sItem.getPriority());
             mPriority.setSelection(spinnerPosition);
-            String[] date = sItem.getDate().split("-");
-             year = Integer.parseInt(date[0]);
-             month = Integer.parseInt(date[1]) - 1;
-             day = Integer.parseInt(date[2]);
+            if(!sItem.getDate().equals("No Due")){
+                String[] date = sItem.getDate().split("-");
+                year = Integer.parseInt(date[0]);
+                month = Integer.parseInt(date[1]) - 1;
+                day = Integer.parseInt(date[2]);
+            }
             mDatePicker.setText(sItem.getDate());
         }
         return v;
@@ -161,7 +163,7 @@ public class EditItemDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             mDatePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
-            mDatePickerDialog.getDatePicker().setMinDate(new Date().getTime());
+            mDatePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 1 * 1000);
             return mDatePickerDialog;
         }
 
