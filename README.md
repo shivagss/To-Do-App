@@ -3,7 +3,7 @@ TO-DO Application for Android
 
 This is a quick and dirty implementation of the TO-DO application. 
 
-####Total time spent: 5 Hours
+####Total time spent: 6 Hours
 
 ####Notable implementation details:
   * Create a To-Do item by pressing the add button in ActionBar. 
