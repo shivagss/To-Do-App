@@ -15,3 +15,6 @@ This is a quick and dirty implementation of the TO-DO application.
   * Use custom array adapter for ListView to display due date and priority(shown as image).
   * Due date are displayed in days difference from current date. Due dates can only be in future.
   * The priorities for each items are Standard, High(icon: star_on) and Low(icon: star_off).
+
+####Demo:
+![Video Walkthrough](demo.gif)
